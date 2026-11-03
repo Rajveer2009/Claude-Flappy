@@ -38,8 +38,8 @@ public class GameView extends View {
     private static final float MAX_SPEED = 60f;
     private static final float PIPE_W = 17f;
     private static final float PIPE_SPACING = 64f;      // between pipe left edges
-    private static final float START_GAP = 48f;
-    private static final float MIN_GAP = 38f;
+    private static final float START_GAP = 40f;         // opening between top and bottom pillar
+    private static final float MIN_GAP = 32f;
     private static final float BODY_R = 7f;             // spark ray length
     private static final float HIT_R = 4.6f;            // forgiving collision radius
     private static final float GROUND_H = 18f;
@@ -123,7 +123,6 @@ public class GameView extends View {
     private final Music music;
     private final RectF musicBtn = new RectF();
     private final RectF muteBtn = new RectF();
-    private final RectF pauseBtn = new RectF();
     /** Areas covered by a camera notch / punch hole; the HUD stays clear of them. */
     private float safeL, safeR, safeT;
     private int tokenStreak;
@@ -326,10 +325,6 @@ public class GameView extends View {
         }
         if (state != State.RUNNING && musicBtn.contains(x, y)) {
             toggleMusic();
-            return;
-        }
-        if (state == State.RUNNING && pauseBtn.contains(x, y)) {
-            pause();
             return;
         }
         action();
@@ -905,7 +900,6 @@ public class GameView extends View {
     private void drawHud(Canvas c, int fg, int bg) {
         float pad = 4 * u;
         // keep the HUD clear of a camera notch / punch hole
-        float padL = Math.max(pad, safeL + 2 * u);
         float padR = Math.max(pad, safeR + 2 * u);
         float padT = Math.max(pad, safeT + 1 * u);
 
@@ -927,12 +921,6 @@ public class GameView extends View {
             float tw = text.measureText(tc);
             c.drawText(tc, W - padR, padT + 9 * u, text);
             c.drawCircle(W - padR - tw - 2.4f * u, padT + 7.8f * u, 1.7f * u, fill);
-        }
-
-        if (state == State.RUNNING) {
-            drawPauseButton(c, fg, padL + 4.5f * u, padT + 4.5f * u);
-        } else {
-            pauseBtn.setEmpty();
         }
 
         // sound toggles, only on menus so they can't be hit by accident mid-flight
@@ -1023,19 +1011,6 @@ public class GameView extends View {
             c.drawText("Tap to try again", W / 2,
                     rect.bottom + 10 * u + (float) Math.sin(idleTime * 4) * 0.6f * u, title);
         }
-    }
-
-    private void drawPauseButton(Canvas c, int fg, float cx, float cy) {
-        float r = 3.6f * u;
-        pauseBtn.set(cx - r * 1.5f, cy - r * 1.5f, cx + r * 1.5f, cy + r * 1.5f);
-        stroke.setColor(lerpColor(fg, mix(BG), 0.5f));
-        stroke.setStrokeWidth(0.4f * u);
-        c.drawCircle(cx, cy, r, stroke);
-        fill.setColor(fg);
-        rect.set(cx - 1.5f * u, cy - 1.6f * u, cx - 0.5f * u, cy + 1.6f * u);
-        c.drawRoundRect(rect, 0.3f * u, 0.3f * u, fill);
-        rect.set(cx + 0.5f * u, cy - 1.6f * u, cx + 1.5f * u, cy + 1.6f * u);
-        c.drawRoundRect(rect, 0.3f * u, 0.3f * u, fill);
     }
 
     private void drawMuteButton(Canvas c, int fg, float cx, float cy) {

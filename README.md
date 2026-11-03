@@ -3,8 +3,9 @@
 A small one-tap Android game starring Claude's orange spark, now with a wing. Tap to
 flap and thread the spark through the gaps between pillars of buggy code (each capped by
 a terminal window showing `ERR`, `404`, `NaN` and friends). Every pillar you pass scores
-a point, and tokens floating between the pillars are worth a bonus point each. The gaps
-narrow as your score climbs, and from 15 points on some of them drift up and down. Day
+a point, and tokens floating between the pillars are worth a bonus point each. The opening
+between the top and bottom pillar is tight from the start and narrows further as your
+score climbs, and from 15 points on some openings drift up and down. Day
 turns to night every 30 points.
 
 **Dark mode:** the game follows your phone's system theme. With dark mode on, it plays
@@ -32,11 +33,12 @@ notch / punch hole, while keeping the score and buttons clear of it.
 | Action | Touch | Keyboard |
 |---|---|---|
 | Start / flap | Tap anywhere | Space, ↑, W, Enter |
-| Pause / resume | Pause button (top left) | P, Esc |
+| Pause / resume | — (pauses itself when you leave the app) | P, Esc |
 | Music on / off | ♫ button (menus only) | N |
 | Sound effects on / off | Speaker button (menus only) | M |
 
-The game also pauses itself when you leave the app.
+There's no on-screen pause button, so a stray tap never stops your flight; the game
+pauses itself when you leave the app, and a tap resumes it.
 
 ## Get the APK
 
