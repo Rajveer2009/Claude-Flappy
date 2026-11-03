@@ -36,12 +36,16 @@ public class GameView extends View {
     private static final float MAX_FALL = 120f;         // u/s
     private static final float START_SPEED = 44f;       // u/s
     private static final float MAX_SPEED = 60f;
-    private static final float PIPE_W = 17f;
-    private static final float PIPE_SPACING = 64f;      // between pipe left edges
-    private static final float START_GAP = 40f;         // opening between top and bottom pillar
-    private static final float MIN_GAP = 32f;
     private static final float BODY_R = 7f;             // spark ray length
+    private static final float BODY = BODY_R * 2;       // spark's full width, rays included
     private static final float HIT_R = 4.6f;            // forgiving collision radius
+    private static final float PIPE_W = BODY * 1.1f;    // pillars just 10% wider than the spark
+    private static final float PIPE_SPACING = 64f;      // between pipe left edges
+    // Opening between the top and bottom pillar: about twice the spark, tightening a little
+    // with score. Close to the smallest that can be passed: a flap arc spans ~10u while the
+    // spark crosses a pillar, on top of the spark's own hit size.
+    private static final float START_GAP = BODY * 2f;   // 28u
+    private static final float MIN_GAP = 25f;
     private static final float GROUND_H = 18f;
     private static final int LEVEL_EVERY = 10;          // banner + chime
     private static final int NIGHT_EVERY = 30;          // score between day/night swaps
@@ -541,14 +545,14 @@ public class GameView extends View {
         p.gap = (START_GAP + (MIN_GAP - START_GAP) * t) * u;
         // gaps drift up and down from score 15 on
         if (score >= 15 && rnd.nextFloat() < 0.4f) {
-            p.amp = 3f + rnd.nextFloat() * Math.min(7f, (score - 15) * 0.3f + 2f);
+            p.amp = 2f + rnd.nextFloat() * Math.min(4f, (score - 15) * 0.2f + 1f);
             p.phase = rnd.nextFloat() * 6.28f;
         }
         float margin = 14 * u + p.amp * u;
         float lo = margin + p.gap / 2, hi = groundY - margin - p.gap / 2;
         float y = lo + rnd.nextFloat() * Math.max(0, hi - lo);
         if (prev != null) { // keep consecutive gaps reachable
-            float maxStep = 34 * u;
+            float maxStep = 26 * u;
             y = Math.max(prev.gapY - maxStep, Math.min(prev.gapY + maxStep, y));
         }
         p.gapY = y;

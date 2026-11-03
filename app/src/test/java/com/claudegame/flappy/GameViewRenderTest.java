@@ -111,13 +111,13 @@ public class GameViewRenderTest {
 
         step(v, c, 30);
         save(bmp, out + "/5_dark_title.png");
-        assertTrue("background should be dark", luminance(bmp.getPixel(5, H / 2)) < 0.2f);
+        assertTrue("background should be dark", backgroundLuminance(bmp) < 0.2f);
 
         tap(v, W * 0.5f);
         int frames = 0;
         while (frames++ < 900 && v.score() < 2 && !v.isOver()) autopilot(v, c);
         save(bmp, out + "/6_dark_flying.png");
-        assertTrue("stays dark while playing", luminance(bmp.getPixel(5, H / 2)) < 0.2f);
+        assertTrue("stays dark while playing", backgroundLuminance(bmp) < 0.2f);
 
         // Switching the phone back to light mode mid-game fades the palette back to light.
         android.content.res.Configuration light =
@@ -127,7 +127,7 @@ public class GameViewRenderTest {
         v.dispatchConfigurationChanged(light);
         v.onKeyDown(KeyEvent.KEYCODE_P, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_P));
         step(v, c, 120);
-        assertTrue("turns light again", luminance(bmp.getPixel(5, H / 2)) > 0.6f);
+        assertTrue("turns light again", backgroundLuminance(bmp) > 0.6f);
     }
 
     @Test
@@ -259,8 +259,9 @@ public class GameViewRenderTest {
     }
 
     private static void autopilot(GameView v, Canvas c) throws Exception {
-        // flap near the top of each hop while below the gap centre
-        if (v.birdY() > v.nextGapY() + 20 && v.birdVy() > -250) tap(v, W * 0.5f);
+        // A flap always lifts the spark ~12u, so flap once it sinks ~4.5u below the gap
+        // centre: each hop then stays inside the tight (~28u) opening.
+        if (v.birdY() > v.nextGapY() + 45 && v.birdVy() > -250) tap(v, W * 0.5f);
         step(v, c, 1);
     }
 
@@ -276,6 +277,16 @@ public class GameViewRenderTest {
         v.layout(0, 0, W, H);
         v.seed(42);
         return v;
+    }
+
+    /** Median brightness over a grid of points: the background, even if pillars cross it. */
+    private static float backgroundLuminance(Bitmap bmp) {
+        java.util.ArrayList<Float> l = new java.util.ArrayList<>();
+        for (int x = 20; x < W; x += 70) {
+            for (int y = 200; y < H - 400; y += 100) l.add(luminance(bmp.getPixel(x, y)));
+        }
+        java.util.Collections.sort(l);
+        return l.get(l.size() / 2);
     }
 
     private static float luminance(int argb) {

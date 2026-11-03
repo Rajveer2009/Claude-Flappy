@@ -3,10 +3,11 @@
 A small one-tap Android game starring Claude's orange spark, now with a wing. Tap to
 flap and thread the spark through the gaps between pillars of buggy code (each capped by
 a terminal window showing `ERR`, `404`, `NaN` and friends). Every pillar you pass scores
-a point, and tokens floating between the pillars are worth a bonus point each. The opening
-between the top and bottom pillar is tight from the start and narrows further as your
-score climbs, and from 15 points on some openings drift up and down. Day
-turns to night every 30 points.
+a point, and tokens floating between the pillars are worth a bonus point each. It's
+tight: the pillars are only about 10% wider than the spark, and the opening between the
+top and bottom pillar is about twice the spark's size, narrowing a little more as your
+score climbs. From 15 points on some openings drift up and down. Day turns to night
+every 30 points.
 
 **Dark mode:** the game follows your phone's system theme. With dark mode on, it plays
 in the dark palette the whole time; switch the setting while playing and the colors fade
